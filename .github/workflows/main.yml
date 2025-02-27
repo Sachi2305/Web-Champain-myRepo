@@ -1,14 +1,17 @@
+name: my first workflow
+
 on:
   push:
     branches:
       - main, branch2
-
+env:
+  a : sachi
 jobs:
   my_job:  
     runs-on: ubuntu-latest
     steps:
       - name: Print Hello
-        run: echo "Hello, GitHub Actions!"  
+        run: echo "Hello, $a !"  
   
   myjob_2:
     runs-on: ubuntu-latest
