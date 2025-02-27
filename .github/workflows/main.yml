@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print Hello
-        run: echo "Hello, $a from id = ${{ var.id }}!"  
+        run: echo "Hello, $a from id = ${{ var.ID }}!"  
   
   myjob_2:
     runs-on: ubuntu-latest
