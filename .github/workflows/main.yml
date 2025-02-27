@@ -7,14 +7,14 @@ on:
       - main
       - branch2
   
-#env:
- # a : sachi
+env:
+  a : sachi
 jobs:
   my_job:  
     runs-on: ubuntu-latest
     steps:
       - name: Print Hello
-        run: echo "Hello, sachi from id = ${{ vars.ID }}!"  
+        run: echo "Hello, $a from id = ${{ vars.ID }}!"  
   
   myjob_2:
     runs-on: ubuntu-latest
