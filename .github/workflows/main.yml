@@ -4,16 +4,17 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main, branch2
+      - main
+      - branch2
   
-env:
-  a : sachi
+#env:
+ # a : sachi
 jobs:
   my_job:  
     runs-on: ubuntu-latest
     steps:
       - name: Print Hello
-        run: echo "Hello, $a from id = ${{ var.ID }}!"  
+        run: echo "Hello, sachi from id = ${{ var.ID }}!"  
   
   myjob_2:
     runs-on: ubuntu-latest
