@@ -9,6 +9,9 @@ jobs:
     steps:
       - name: Print Hello
         run: echo "Hello, GitHub Actions!"  
-
+  
+  myjob_2:
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
