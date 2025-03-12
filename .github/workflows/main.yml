@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - master
+      - main
   schedule:
-    - cron: '30 11 * * *' 
+    - cron: '32 10 * * *' 
 jobs:
   set-push-flag:
     if: github.event_name == 'push'
