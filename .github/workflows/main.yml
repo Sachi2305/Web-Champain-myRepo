@@ -1,23 +1,47 @@
-name: my first workflow
+name: Conditional Scheduled Pipeline
 
 on:
-  workflow_dispatch:
   push:
     branches:
-      - main
-      - branch2
-  
-env:
-  a : sachi
+      - master
+  schedule:
+    - cron: '0 22 * * *'  # Runs at 10 PM UTC daily
+
 jobs:
-  my_job:  
+  set-push-flag:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - name: Print Hello
-        run: echo "Hello, $a from id = ${{ vars.ID }}!"  
-  
-  myjob_2:
+      - name: Create push flag
+        run: echo "push_detected=true" > push_flag.txt
+
+      - name: Upload push flag as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: push-flag
+          path: push_flag.txt
+          retention-days: 1  # Keep for only 1 day
+
+  run-pipeline:
+    if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - name: Download push flag artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: push-flag
+        continue-on-error: true  # Prevent failure if artifact doesn't exist
+
+      - name: Check if a push happened today
+        run: |
+          if [ ! -f push_flag.txt ]; then
+            echo "No push detected today. Skipping workflow."
+            exit 0
+          fi
+
+      - name: Execute pipeline
+        run: echo "Executing scheduled pipeline..."
+
+      - name: Cleanup push flag
+        if: always()
+        run: rm -f push_flag.txt  # Remove flag after execution
