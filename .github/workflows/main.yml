@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download push flag artifact (Allow Missing)
-        uses: actions/download-artifact@v3  # ✅ Fixed version
+        uses: actions/download-artifact@v4
         with:
           name: push-flag
         continue-on-error: true  # Prevent failure if artifact is missing
