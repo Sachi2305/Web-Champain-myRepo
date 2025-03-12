@@ -1,13 +1,11 @@
-name: Conditional Scheduled Pipeline vol2
+name: Conditional Scheduled Pipeline
 
 on:
   push:
     branches:
       - master
-  
   schedule:
-    - cron: '30 9 * * *'  # Runs at 10 PM UTC daily
-
+    - cron: '30 11 * * *' 
 jobs:
   set-push-flag:
     if: github.event_name == 'push'
@@ -17,7 +15,7 @@ jobs:
         run: echo "push_detected=true" > push_flag.txt
 
       - name: Upload push flag as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: push-flag
           path: push_flag.txt
@@ -27,11 +25,11 @@ jobs:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
-      - name: Download push flag artifact
-        uses: actions/download-artifact@v4
+      - name: Download push flag artifact (Allow Missing)
+        uses: actions/download-artifact@v3  # ✅ Fixed version
         with:
           name: push-flag
-        continue-on-error: true  # Prevent failure if artifact doesn't exist
+        continue-on-error: true  # Prevent failure if artifact is missing
 
       - name: Check if a push happened today
         run: |
