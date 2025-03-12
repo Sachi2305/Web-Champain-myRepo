@@ -6,7 +6,7 @@ on:
       - master
   
   schedule:
-    - cron: '0 22 * * *'  # Runs at 10 PM UTC daily
+    - cron: '30 9 * * *'  # Runs at 10 PM UTC daily
 
 jobs:
   set-push-flag:
