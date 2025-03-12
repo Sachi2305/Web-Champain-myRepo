@@ -1,9 +1,6 @@
 name: Conditional Scheduled Pipeline
 
 on:
-  push:
-    branches:
-      - master
   schedule:
     - cron: '0 22 * * *'  # Runs at 10 PM UTC daily
 
