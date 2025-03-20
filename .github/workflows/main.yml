@@ -1,41 +1,49 @@
-name: Conditional Scheduled Pipeline
+name: Conditional Scheduled Pipeline vol3
 
 on:
   push:
     branches:
       - master
-      - main
   schedule:
-    - cron: '32 10 * * *' 
+    - cron: '30 16 * * *'  # Runs at 10:00 PM IST (4:30 PM UTC)
+
 jobs:
   set-push-flag:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - name: Create push flag
-        run: echo "push_detected=true" > push_flag.txt
+      - name: Get current time in IST
+        run: |
+          CURRENT_HOUR=$(TZ=Asia/Kolkata date +%H)
+          if [ $CURRENT_HOUR -ge 9 ] && [ $CURRENT_HOUR -lt 20 ]; then
+            echo "Push happened between 9 AM and 8 PM IST"
+            echo "push_detected=true" > push_flag.txt
+          else
+            echo "Push outside the allowed time window, skipping flag creation."
+          fi
 
-      - name: Upload push flag as artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload push flag
+        if: success()
+        uses: actions/upload-artifact@v4
         with:
           name: push-flag
           path: push_flag.txt
-          retention-days: 1  # Keep for only 1 day
+          retention-days: 1  # Store flag only for today
 
   run-pipeline:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
-      - name: Download push flag artifact (Allow Missing)
+      - name: Download push flag
         uses: actions/download-artifact@v4
         with:
           name: push-flag
-        continue-on-error: true  # Prevent failure if artifact is missing
+        continue-on-error: true  # Don't fail if artifact is missing
 
-      - name: Check if a push happened today
+      - name: Check if push happened in the time range
         run: |
           if [ ! -f push_flag.txt ]; then
-            echo "No push detected today. Skipping workflow."
+            echo "No push between 9 AM and 8 PM IST. Skipping workflow."
             exit 0
           fi
 
