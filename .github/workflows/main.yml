@@ -18,7 +18,7 @@ jobs:
 
           while [ "$(date -u +"%H:%M")" | = "$TARGET_TIME"]; do
             echo "waiting for $TARGET_TIME"
-            sleep 3600
+            sleep 60
           done
 
           echo "proceeding..."
