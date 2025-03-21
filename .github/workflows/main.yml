@@ -1,55 +1,27 @@
-name: Conditional Scheduled Pipeline vol3
+name: Scheduled Pipeline vol4 
 
 on:
   push:
     branches:
       - master
-  schedule:
-    - cron: '30 16 * * *'  # Runs at 10:00 PM IST (4:30 PM UTC)
-
+  
 jobs:
-  set-push-flag:
-    if: github.event_name == 'push'
+  wait-and-run:
     runs-on: ubuntu-latest
     steps:
-      - name: Get current time in IST
+      - name: Get current time
         run: |
-          CURRENT_HOUR=$(TZ=Asia/Kolkata date +%H)
-          if [ $CURRENT_HOUR -ge 9 ] && [ $CURRENT_HOUR -lt 20 ]; then
-            echo "Push happened between 9 AM and 8 PM IST"
-            echo "push_detected=true" > push_flag.txt
-          else
-            echo "Push outside the allowed time window, skipping flag creation."
-          fi
+          CURRENT_TIME = $(date -u +"%H:%M")
+          echo "Current Time: $CURRENT_TIME"
 
-      - name: Upload push flag
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: push-flag
-          path: push_flag.txt
-          retention-days: 1  # Store flag only for today
+          TARGET_TIME= "21:45"
 
-  run-pipeline:
-    if: github.event_name == 'schedule'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download push flag
-        uses: actions/download-artifact@v4
-        with:
-          name: push-flag
-        continue-on-error: true  # Don't fail if artifact is missing
+          while [ "$(date -u +"%H:%M")" | = "$TARGET_TIME"]; do
+            echo "waiting for $TARGET_TIME"
+            sleep 3600
+          done
 
-      - name: Check if push happened in the time range
-        run: |
-          if [ ! -f push_flag.txt ]; then
-            echo "No push between 9 AM and 8 PM IST. Skipping workflow."
-            exit 0
-          fi
+          echo "proceeding..."
 
-      - name: Execute pipeline
-        run: echo "Executing scheduled pipeline..."
-
-      - name: Cleanup push flag
-        if: always()
-        run: rm -f push_flag.txt  # Remove flag after execution
+      - name: Run workflow
+        run: echo "Pipeline runs successfully at scheduled time"
