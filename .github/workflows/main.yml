@@ -9,12 +9,12 @@ jobs:
     steps:
       - name: Get current time
         run: |
-          CURRENT_TIME=$(date -u +"%H:%M")
+          CURRENT_TIME=$(date +"%H:%M")
           echo "Current Time: $CURRENT_TIME"
 
-          TARGET_TIME="22:35"
+          TARGET_TIME="7:31"
 
-          while [ "$(date -u +"%H:%M")" != "$TARGET_TIME" ]; do
+          while [ "$(date +"%H:%M")" != "$TARGET_TIME" ]; do
             echo "waiting for $TARGET_TIME"
             sleep 60
           done
