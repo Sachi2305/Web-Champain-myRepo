@@ -12,7 +12,7 @@ jobs:
           CURRENT_TIME=$(date +"%H:%M")
           echo "Current Time: $CURRENT_TIME"
 
-          TARGET_TIME="4:10"
+          TARGET_TIME="05:05"
 
           while [ "$(date +"%H:%M")" != "$TARGET_TIME" ]; do
             echo "waiting for $TARGET_TIME"
