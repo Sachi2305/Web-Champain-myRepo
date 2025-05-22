@@ -12,8 +12,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      #- name: Show the pushed tag
-       # run: echo "Deployed tag: $GITHUB_REF"
+      - name: Show the pushed tag
+        run: |
+          echo "Deployed tag: $GITHUB_REF"
 
       - name: Do something useful (demo)
         run: echo "This is a tag-triggered pipeline!"
