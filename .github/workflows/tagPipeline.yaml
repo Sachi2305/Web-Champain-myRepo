@@ -1,0 +1,19 @@
+name: Tag Pipeline
+
+on:
+  push:
+    tags:
+      - 'v*'  # Only triggers when you push a tag like v1.0.0
+
+jobs:
+  tag_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Show the pushed tag
+        run: echo "Deployed tag: $GITHUB_REF"
+
+      - name: Do something useful (demo)
+        run: echo "This is a tag-triggered pipeline!"
