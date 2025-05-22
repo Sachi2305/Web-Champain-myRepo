@@ -3,7 +3,7 @@ name: Tag Pipeline
 on:
   push:
     tags:
-      - 'v1.0'  # Only triggers when you push a tag like v1.0.0
+      - 'v*'  # Only triggers when you push a tag like v1.0.0
 
 jobs:
   tag_job:
