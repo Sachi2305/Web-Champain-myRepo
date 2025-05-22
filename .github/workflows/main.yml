@@ -1,8 +1,8 @@
 name: Scheduled Pipeline vol4 
 
 on:
-  push:
-    
+  #push:
+  workflow_dispatch:  
 jobs:
   wait-and-run:
     runs-on: ubuntu-latest
