@@ -1,4 +1,4 @@
-name: Automated Tagging
+name: Auto Tag and Release
 
 on:
   push:
@@ -6,13 +6,21 @@ on:
       - main
 
 jobs:
-  tag:
+  tag_and_release:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Create Tag
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git tag -a "v${{ github.run_number }}" -m "Release v${{ github.run_number }}"
-          git push origin "v${{ github.run_number }}"
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Auto Tag
+        uses: butlerlogic/action-autotag@1.1.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.autotag.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
